@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Entity
-@Table(name = "match")
+@Table(name = "matches")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
