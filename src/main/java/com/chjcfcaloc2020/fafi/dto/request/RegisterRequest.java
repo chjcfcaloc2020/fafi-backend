@@ -9,19 +9,19 @@ import lombok.Data;
 
 @Data
 public class RegisterRequest {
-    @NotBlank(message = "Username is required")
-    @NotNull(message = "Please type username!")
+    @NotNull(message = "Username is required")
+    @NotBlank(message = "Please type username!")
     @Size(min = 6, message = "Username must be at least 6 characters!")
     private String username;
 
-    @NotBlank(message = "Password is required")
-    @NotNull(message = "Please type password!")
+    @NotNull(message = "Password is required")
+    @NotBlank(message = "Please type password!")
     @Size(min = 6, message = "Password must be at least 6 characters!")
     private String password;
 
     @Email(message = "Email should be valid")
-    @NotBlank(message = "Email is required")
-    @NotNull(message = "Please type email!")
+    @NotNull(message = "Email is required")
+    @NotBlank(message = "Please type email!")
     private String email;
 
     private String phone;
