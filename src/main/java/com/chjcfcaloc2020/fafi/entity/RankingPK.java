@@ -13,5 +13,5 @@ import java.io.Serializable;
 @Embeddable
 public class RankingPK implements Serializable {
     private String leagueId;
-    private Long teamId;
+    private String teamId;
 }

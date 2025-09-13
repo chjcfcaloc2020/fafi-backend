@@ -5,6 +5,7 @@ import com.chjcfcaloc2020.fafi.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -27,6 +28,23 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        // league
+                        .requestMatchers(HttpMethod.GET, "/api/v1/leagues", "/api/v1/leagues/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/leagues").hasAnyRole("ORGANIZER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/leagues/**").hasAnyRole("ORGANIZER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/leagues/**").hasAnyRole("ORGANIZER", "ADMIN")
+                        // team
+                        .requestMatchers(HttpMethod.GET, "/api/v1/teams", "/api/v1/teams/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/teams").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/teams/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/teams/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/teams/my-teams").hasAnyRole("MANAGER", "ADMIN")
+                        // player
+                        .requestMatchers(HttpMethod.GET, "/api/v1/players", "/api/v1/players/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/players").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/leagues/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/leagues/**").hasAnyRole("MANAGER", "ADMIN")
                         .anyRequest().permitAll()
                 )
                 .authenticationProvider(authenticationProvider())

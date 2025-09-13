@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "team")
 @Data
@@ -14,8 +17,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Team {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private String name;
     private String logo;
@@ -23,9 +26,8 @@ public class Team {
     @Column(name = "coach_name")
     private String coachName;
 
-    @ManyToOne
-    @JoinColumn(name = "league_id")
-    private League league;
+    @ManyToMany(mappedBy = "teams")
+    private Set<League> leagues = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "username")

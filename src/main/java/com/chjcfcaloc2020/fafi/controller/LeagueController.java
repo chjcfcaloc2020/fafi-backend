@@ -7,8 +7,11 @@ import com.chjcfcaloc2020.fafi.service.LeagueService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,19 +39,36 @@ public class LeagueController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ORGANIZER', 'ADMIN')")
     public ResponseEntity<LeagueDTO> createLeague(
             @RequestBody @Valid LeagueDTO leagueDTO,
             @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            throw new AccessDeniedException("You must be logged in to create a league");
+        }
         League createdLeague = leagueService.createLeague(leagueDTO, userDetails.getUsername());
         return ResponseEntity.ok(new LeagueDTO(createdLeague));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ORGANIZER', 'ADMIN')")
     public ResponseEntity<LeagueDTO> updateLeague(
             @PathVariable String id,
             @RequestBody @Valid LeagueDTO leagueDTO,
             @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            throw new AccessDeniedException("You must be logged in to update a league");
+        }
         League updatedLeague = leagueService.updateLeague(id, leagueDTO, userDetails.getUsername());
         return ResponseEntity.ok(new LeagueDTO(updatedLeague));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ORGANIZER', 'ADMIN')")
+    public ResponseEntity<Void> deleteLeague(
+            @PathVariable String id,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        leagueService.deleteLeague(id, userDetails.getUsername());
+        return ResponseEntity.noContent().build();
     }
 }

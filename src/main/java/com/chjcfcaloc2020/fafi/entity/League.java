@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "league")
@@ -43,6 +45,14 @@ public class League {
 
     @Enumerated(EnumType.STRING)
     private LeagueStatus status;
+
+    @ManyToMany
+    @JoinTable(
+            name = "league_team",
+            joinColumns = @JoinColumn(name = "league_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id")
+    )
+    private Set<Team> teams = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "username")
