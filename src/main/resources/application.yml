@@ -8,7 +8,7 @@ spring:
       fafi-backend
 
   datasource:
-    url: jdbc:mysql://localhost:3306/fafi_db
+    url: jdbc:mysql://localhost:3306/fa_db
     username: root
     password: Chipheo2k3@
     driver-class-name: com.mysql.cj.jdbc.Driver

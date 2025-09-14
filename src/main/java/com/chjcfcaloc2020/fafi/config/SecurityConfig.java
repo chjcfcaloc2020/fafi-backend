@@ -45,6 +45,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/players").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/leagues/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/leagues/**").hasAnyRole("MANAGER", "ADMIN")
+                        // invitations
+                        .requestMatchers(HttpMethod.POST, "/api/v1/invitations").hasAnyRole("ORGANIZER", "ADMIN")
                         .anyRequest().permitAll()
                 )
                 .authenticationProvider(authenticationProvider())

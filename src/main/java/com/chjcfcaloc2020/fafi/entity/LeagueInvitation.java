@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "league_invitation")
@@ -29,4 +32,8 @@ public class LeagueInvitation {
 
     @Enumerated(EnumType.STRING)
     private LeagueInvitationStatus status;
+
+    @Column(name = "created_date", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdDate;
 }
