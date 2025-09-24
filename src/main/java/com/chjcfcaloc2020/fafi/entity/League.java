@@ -46,7 +46,7 @@ public class League {
     @Enumerated(EnumType.STRING)
     private LeagueStatus status;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "league_team",
             joinColumns = @JoinColumn(name = "league_id"),

@@ -1,9 +1,7 @@
 package com.chjcfcaloc2020.fafi.controller;
 
 import com.chjcfcaloc2020.fafi.dto.PlayerDTO;
-import com.chjcfcaloc2020.fafi.dto.TeamDTO;
 import com.chjcfcaloc2020.fafi.entity.Player;
-import com.chjcfcaloc2020.fafi.entity.Team;
 import com.chjcfcaloc2020.fafi.service.PlayerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +16,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/players")
+@RequestMapping("/api/players")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class PlayerController {
     private final PlayerService playerService;
 

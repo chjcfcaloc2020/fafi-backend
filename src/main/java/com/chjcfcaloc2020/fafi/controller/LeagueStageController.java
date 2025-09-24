@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/league-stages")
+@RequestMapping("/api/league-stages")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class LeagueStageController {
     private final LeagueStageService leagueStageService;
 

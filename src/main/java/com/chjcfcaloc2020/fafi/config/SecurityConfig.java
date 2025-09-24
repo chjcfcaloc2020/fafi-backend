@@ -28,25 +28,33 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         // league
-                        .requestMatchers(HttpMethod.GET, "/api/v1/leagues", "/api/v1/leagues/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/leagues").hasAnyRole("ORGANIZER", "ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/leagues/**").hasAnyRole("ORGANIZER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/leagues/**").hasAnyRole("ORGANIZER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/leagues", "/api/leagues/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/leagues").hasAnyRole("ORGANIZER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/leagues/**").hasAnyRole("ORGANIZER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/leagues/**").hasAnyRole("ORGANIZER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/leagues/{leagueId}/teams/{teamId}").hasAnyRole("MANAGER", "ADMIN")
                         // team
-                        .requestMatchers(HttpMethod.GET, "/api/v1/teams", "/api/v1/teams/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/teams").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/teams/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/teams/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/teams/my-teams").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/teams", "/api/teams/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/teams", "/api/teams/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/teams/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/teams/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/teams/my-teams", "/api/teams/{leagueId}/my-teams").hasAnyRole("MANAGER", "ADMIN")
                         // player
-                        .requestMatchers(HttpMethod.GET, "/api/v1/players", "/api/v1/players/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/players").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/leagues/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/leagues/**").hasAnyRole("MANAGER", "ADMIN")
-                        // invitations
-                        .requestMatchers(HttpMethod.POST, "/api/v1/invitations").hasAnyRole("ORGANIZER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/players", "/api/players/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/players").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/leagues/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/leagues/**").hasAnyRole("MANAGER", "ADMIN")
+                        // invitation
+                        .requestMatchers(HttpMethod.GET, "/api/invitations/**").hasAnyRole("ORGANIZER", "ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/api/invitations").hasAnyRole("ORGANIZER", "ADMIN")
+                        // match
+                        .requestMatchers(HttpMethod.GET, "/api/matches", "/api/matches/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/matches", "/api/matches/**").hasAnyRole("ORGANIZER", "ADMIN")
+                        // match-event
+                        .requestMatchers(HttpMethod.GET, "/api/match-events", "/api/match-events/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/match-events").hasAnyRole("ORGANIZER", "ADMIN")
                         .anyRequest().permitAll()
                 )
                 .authenticationProvider(authenticationProvider())

@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/invitations")
+@RequestMapping("/api/invitations")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class LeagueInvitationController {
     private final LeagueInvitationService invitationService;
 
@@ -79,6 +80,14 @@ public class LeagueInvitationController {
         return ResponseEntity.ok(invitationDTOs);
     }
 
+    @GetMapping("{leagueId}/check-in")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
+    public ResponseEntity<?> checkExistsManagerInLeague(
+            @PathVariable String leagueId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(invitationService.checkExistsManagerInLeague(leagueId, userDetails.getUsername()));
+    }
+
     @PostMapping
     @PreAuthorize("hasAnyRole('ORGANIZER', 'ADMIN')")
     public ResponseEntity<LeagueInvitationDTO> createInvitation(
@@ -101,4 +110,19 @@ public class LeagueInvitationController {
 //            @AuthenticationPrincipal UserDetails userDetails) {
 //        LeagueInvitation invitation
 //    }
+
+    @PatchMapping("/{leagueId}/manager/{managerUsername}/status")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
+    public ResponseEntity<LeagueInvitationDTO> acceptByManager(
+            @PathVariable String leagueId,
+            @PathVariable String managerUsername,
+            @Valid @RequestBody UpdateInvitationStatus request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        LeagueInvitation acceptRequest = invitationService.acceptByManager(
+                leagueId,
+                managerUsername,
+                request.getStatus()
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(new LeagueInvitationDTO(acceptRequest));
+    }
 }

@@ -16,6 +16,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayerDTO {
+    private Long id;
+
     @NotNull(message = "Player's name is required")
     @NotBlank(message = "Please type player's name")
     @Size(min = 2, max = 50, message = "Player name must be between 2 and 50 characters")
@@ -32,6 +34,7 @@ public class PlayerDTO {
     private String team;
 
     public PlayerDTO(Player player) {
+        this.id = player.getId();
         this.name = player.getName();
         this.dob = player.getDob();
         this.position = player.getPosition();

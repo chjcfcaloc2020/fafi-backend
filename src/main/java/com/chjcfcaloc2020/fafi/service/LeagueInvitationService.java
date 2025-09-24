@@ -51,6 +51,14 @@ public class LeagueInvitationService {
         return invitationRepository.findByManagerUsernameAndStatus(managerUsername, LeagueInvitationStatus.PENDING);
     }
 
+    public boolean checkExistsManagerInLeague(String leagueId, String managerUsername) {
+        if (invitationRepository.existsByLeagueIdAndManagerUsername(leagueId, managerUsername)) {
+            LeagueInvitation invitation = getInvitationById(leagueId, managerUsername);
+            return invitation.getStatus() == LeagueInvitationStatus.ACCEPT;
+        }
+        return false;
+    }
+
     public LeagueInvitation createInvitation(String leagueId, String managerUsername, String organizerUsername) {
         if (invitationRepository.existsByLeagueIdAndManagerUsername(leagueId, managerUsername)) {
             throw new ResourceAlreadyExistsException("Invitation already exists for this manager and league");
@@ -88,6 +96,17 @@ public class LeagueInvitationService {
         if (invitation.getStatus() != LeagueInvitationStatus.PENDING) {
             throw new RuntimeException("Cannot update already processed invitation");
         }
+        if (status != LeagueInvitationStatus.ACCEPT && status != LeagueInvitationStatus.REJECT) {
+            throw new RuntimeException("Invalid status. Only ACCEPTED or REJECTED allowed");
+        }
+
+        invitation.setStatus(status);
+        return invitationRepository.save(invitation);
+    }
+
+    public LeagueInvitation acceptByManager(String leagueId, String managerUsername,
+                                                   LeagueInvitationStatus status) {
+        LeagueInvitation invitation = getInvitationById(leagueId, managerUsername);
         if (status != LeagueInvitationStatus.ACCEPT && status != LeagueInvitationStatus.REJECT) {
             throw new RuntimeException("Invalid status. Only ACCEPTED or REJECTED allowed");
         }

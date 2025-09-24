@@ -1,5 +1,6 @@
 package com.chjcfcaloc2020.fafi.entity;
 
+import com.chjcfcaloc2020.fafi.common.MatchStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,9 @@ public class Match {
     private String location;
     private Integer firstTeamScore;
     private Integer secondTeamScore;
+
+    @Enumerated(EnumType.STRING)
+    private MatchStatus status;
 
     @ManyToOne
     @JoinColumn(name = "league_id")

@@ -18,13 +18,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationManager authenticationManager;
@@ -47,7 +45,7 @@ public class AuthController {
             User user = userRepository.findById(loginRequest.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
-            return ResponseEntity.ok(new AuthResponse(accessToken, user.getRole()));
+            return ResponseEntity.ok(new AuthResponse(accessToken, user.getUsername(), user.getRole()));
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Invalid username or password");
         }

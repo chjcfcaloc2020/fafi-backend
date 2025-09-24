@@ -15,6 +15,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LeagueDTO {
+    private String id;
+
     @NotNull(message = "League's name is required")
     @NotBlank(message = "Please type league's name")
     @Size(min = 10, message = "League's name so short, which must be least 10 characters")
@@ -50,6 +52,7 @@ public class LeagueDTO {
     private String organizer;
 
     public LeagueDTO(League league) {
+        this.id = league.getId();
         this.name = league.getName();
         this.description = league.getDescription();
         this.teamNumber = league.getTeamNumber();

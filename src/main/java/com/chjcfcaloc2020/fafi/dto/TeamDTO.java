@@ -32,6 +32,6 @@ public class TeamDTO {
         this.name = team.getName();
         this.logo = team.getLogo();
         this.coachName = team.getCoachName();
-        this.manager = team.getManager().getUsername();
+        this.manager = (team.getManager() != null) ? team.getManager().getUsername() : null;
     }
 }

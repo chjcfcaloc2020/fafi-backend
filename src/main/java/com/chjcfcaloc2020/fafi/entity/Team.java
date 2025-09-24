@@ -6,9 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "team")
 @Data
@@ -25,9 +22,6 @@ public class Team {
 
     @Column(name = "coach_name")
     private String coachName;
-
-    @ManyToMany(mappedBy = "teams")
-    private Set<League> leagues = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "username")

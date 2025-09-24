@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/teams")
+@RequestMapping("/api/teams")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class TeamController {
     private final TeamService teamService;
 
@@ -52,6 +53,18 @@ public class TeamController {
                 .map(TeamDTO::new)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(teamDTOs);
+    }
+
+    @GetMapping("/{leagueId}/my-teams")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
+    public ResponseEntity<List<TeamDTO>> getMyTeamsInLeague(
+            @PathVariable String leagueId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            throw new AccessDeniedException("You must be logged in to get all your teams");
+        }
+        List<TeamDTO> teams = teamService.getTeamsByLeagueAndManager(leagueId, userDetails.getUsername());
+        return ResponseEntity.ok(teams);
     }
 
     @PostMapping

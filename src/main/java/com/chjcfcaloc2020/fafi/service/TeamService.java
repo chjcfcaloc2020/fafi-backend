@@ -4,7 +4,6 @@ import com.chjcfcaloc2020.fafi.dto.TeamDTO;
 import com.chjcfcaloc2020.fafi.entity.Team;
 import com.chjcfcaloc2020.fafi.entity.User;
 import com.chjcfcaloc2020.fafi.exception.payload.ResourceNotFoundException;
-import com.chjcfcaloc2020.fafi.repository.LeagueRepository;
 import com.chjcfcaloc2020.fafi.repository.TeamRepository;
 import com.chjcfcaloc2020.fafi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +30,19 @@ public class TeamService {
 
     public List<Team> getMyTeams(String managerUsername) {
         return teamRepository.findByManagerUsername(managerUsername);
+    }
+
+    public List<TeamDTO> getTeamsByLeagueAndManager(String leagueId, String managerUsername) {
+        List<Team> teams = teamRepository.findTeamsByLeagueAndManager(leagueId, managerUsername);
+        return teams.stream()
+                .map(t -> new TeamDTO(
+                        t.getId(),
+                        t.getName(),
+                        t.getLogo(),
+                        t.getCoachName(),
+                        (t.getManager() != null ? t.getManager().getUsername() : null)
+                ))
+                .collect(Collectors.toList());
     }
 
     public Team createTeam(TeamDTO teamDTO, String managerUsername) {
